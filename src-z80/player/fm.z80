@@ -45,6 +45,9 @@ NoteOnFM:
     PollPCM
 
     ex af, af'
+	if LogState
+		call StateNoteOnFM
+	endif
     push de
     push hl
 
@@ -55,7 +58,8 @@ NoteOnFM:
 
     PollPCM
 
-    ld h, FMFreqTable>>8        ; Get address of note
+;	ld h, FMFreqTable>>8       ; Get address of note
+    ld h, >FMFreqTable        ; Get address of note
     ld a, b
     and $1F
     add FMFreqTable&$FF
@@ -126,6 +130,9 @@ NoteOffFM:
     and $07                     ; Get channel ID
     ld (ix+0), $28              ; Note off
     ld (ix+1), a
+	if LogState
+		call StateNoteOffFM
+	endif
     ret                         ; End of subroutine
 
 ;****************************************************************************
@@ -229,6 +236,7 @@ LoadFMBGM:
     add 8
     ld e, a
     xor a
+	call GetFMFadeVal
     ld (de), a
     
     ld e, c
@@ -240,7 +248,8 @@ LoadFMBGM:
 
     push hl                     ; Check if channel is free
     ld a, b
-    ld h, RAM_Locked>>8
+;    ld h, RAM_Locked>>8
+    ld h, >RAM_Locked
     add RAM_Locked&$FF
     ld l, a
     ld a, (hl)
@@ -263,6 +272,35 @@ LoadFMBGM:
     ex af, af'
 
     call LoadFMDirect           ; We're just a wrapper
+	
+	push af
+	push bc
+	push hl
+
+	ld c,a						; backup channel
+	PollPCM
+	
+	ld a,(RAM_BGMFadeOut)		; Get BGM fade out status
+	or a
+	jp z, .nofade				; Ignore if BGM is not fading out
+
+	PollPCM
+	
+    ld hl, RAM_BGMFMVol
+	ld a, l
+	add c						; get correct val for channel
+	ld l, a
+	
+	call GetFMFadeVal
+	ld a,c
+	ld b,a
+	call SetFMVolLoad
+	
+.nofade:
+	pop hl
+	pop bc
+	pop af
+	
     jp ProcessBGMRun            ; End of subroutine
 
 LoadFMEvent:
@@ -275,6 +313,10 @@ LoadFMEvent:
     ex af, af'
 LoadFMDirect:
 
+	if LogState
+		call StateInstrumentFM
+	endif
+	
     push af
     and $04                     ; Determine which port to write
     rrca
@@ -286,7 +328,8 @@ LoadFMDirect:
     push de
     push hl
 
-    ld h, RAM_PointerList>>8    ; Get instrument address
+;    ld h, RAM_PointerList>>8    ; Get instrument address
+    ld h, >RAM_PointerList    ; Get instrument address
     ld l, b
     ld d, (hl)
     inc h
@@ -378,13 +421,17 @@ LoadFMDirect:
     djnz .loadfmloop
     
     PollPCM
-    
+
     ld a, l                     ; Store operator TLs (needed to set the
     sub 24                        ; volume properly when it changes)
     ld l, a
     ld b, 4
+
 .loadfmsavetl:
+	PollPCM
     ld a, (hl)
+;	call GetFMFadeVal
+	
     ld (de), a
     ld a, e
     add 8
@@ -393,13 +440,32 @@ LoadFMDirect:
     djnz .loadfmsavetl
     
     PollPCM
-
+		
+	PollPCM
     pop af
     pop hl
     pop de
     pop bc
+	
     ret
+	
+;****************************************************************************
+; SetFMFadeVal
+; Subroutine to get the FM fade value
+;****************************************************************************
 
+
+GetFMFadeVal:
+	push hl
+	ld hl, RAM_BGMFadeOutVal
+	add (hl)
+	bit 7,a
+	jr z, .nonzero	
+	ld	a,$7f
+.nonzero
+	pop hl
+	ret
+	
 ;****************************************************************************
 ; SetFMVol*
 ; Sets the volume of a FM channel
@@ -411,19 +477,41 @@ SetFMVolSFX:
 
 SetFMVolBGM:
     and $07
-    ld b, a
+	ld b, a
 
     PollPCM
-
+	
     push de
     push bc
     ld a, b
-    ld d, RAM_BGMFMVol>>8        ; Store BGM volume
+    ld d, >RAM_BGMFMVol	        ; Store BGM volume
     add RAM_BGMFMVol&$FF
     ld e, a
     PollPCM
     call GetParam
     PollPCM
+	
+	ld a,b						; Get fade out value
+;	push hl
+;	ld hl, RAM_BGMFadeOutVal
+;	add (hl)
+;	bit 7,a
+;	jr z, .nonzero	
+;	ld	a,$7f
+;.nonzero
+;	pop hl
+	call GetFMFadeVal
+	ld b,a
+	
+; == Debug ==
+;	push hl
+;	ld hl,$1400
+;	ld l,e
+;	ld (hl),b
+;	pop hl
+; ===========
+
+	PollPCM
     ex de, hl
     ld (hl), b
     ex de, hl
@@ -468,6 +556,8 @@ SetFMVolSFXEvent:
     PollPCM
     pop af
 
+; a = channel
+; b = volume
 SetFMVolLoad:
     push bc
     push de
@@ -476,7 +566,7 @@ SetFMVolLoad:
     and $07                     ; Get channel ID
     
     push af
-    ld h, RAM_FMData>>8         ; Get address of FM data
+    ld h, >RAM_FMData         ; Get address of FM data
     add RAM_FMData&$FF
     ld l, a
     
@@ -602,6 +692,10 @@ SetFMParamSFX:
     call GetParam               ; Get parameters
     PollPCM
     ex af, af'
+	
+	if LogState
+		call StateSetParamSFX
+	endif
 
     and $03                     ; Get channel ID
     add $B4
@@ -625,10 +719,10 @@ SetFMParamBGM:
     call GetParam               ; Get parameters
     PollPCM
     ex af, af'
-    
+	
     push hl
     and $07                     ; Store parameters
-    ld h, RAM_BGMFMPan>>8
+    ld h, >RAM_BGMFMPan
     add RAM_BGMFMPan&$FF
     ld l, a
     ld (hl), b
@@ -648,6 +742,10 @@ SetFMParamBGM:
     
     PollPCM
     ex af, af'
+	
+	if LogState
+		call StateSetParamBGM
+	endif
 
     and $03                     ; Get channel ID
     add $B4
@@ -663,11 +761,15 @@ SetFMParamBGM:
 
 LockChannelFM:
     and $07
+	if LogState
+		call StateLockFM
+	endif
+	
     ld b, a
     PollPCM
     
     push hl
-    ld h, RAM_Locked>>8         ; Get address of channel to lock
+    ld h, >RAM_Locked         ; Get address of channel to lock
     ld a, b
     add RAM_Locked&$FF
     ld l, a
@@ -698,7 +800,7 @@ LockChannelFM:
 
 KillFM:
     and $07                     ; Get channel ID
-    
+	
     push af
     push de
     push hl
@@ -767,7 +869,7 @@ KillFM:
 
 RestoreFM:
     ld a, b                       ; Restore BGM FM instrument
-    ld h, RAM_BGMFMInstr>>8
+    ld h, >RAM_BGMFMInstr
     add RAM_BGMFMInstr&$FF
     ld l, a
     
@@ -792,10 +894,19 @@ RestoreFM:
     add 8
     ld l, a
     ld a, b
+;	if LogState
+;		ld b, (hl)
+;		call StateSetParamBGM
+;	endif
+
     and $03
     add $B4
     ld (iy+0), a
-    ld a, (hl)
+;	if LogState
+;		ld a, b
+;	else
+		ld a, (hl)
+;	endif
     ld (iy+1), a
 
     PollPCM

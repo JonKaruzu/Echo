@@ -47,16 +47,26 @@ MainMenu:
     bsr     Echo_PlaySFX
 @NoRight:
 
-    btst.l  #5, d0                  ; Play song?
+    btst.l  #6, d0                  ; Play song?
     bne.s   @DoPlay
-    btst.l  #6, d0
+    btst.l  #5, d0
     beq.s   @NoPlay
+	
+    bsr     Echo_FadeBGM
+	bra.s	@NoPlay
 @DoPlay:
     lea     (SongList), a1            ; Get song address
     move.w  (RAM_CurrSong), d7
     lsl.w   #4, d7
+	
     lea     (a1,d7.w), a1
     move.l  (a1), a0
+	
+	cmpi.w	#SFXThreshold<<4,d7
+	bcs.s	@NotSFX
+    bsr     Echo_PlaySFX              ; Play SFX
+	bra.s	@NoPlay
+@NotSFX:
     bsr     Echo_PlayBGM              ; Play song
 @NoPlay:
 
@@ -66,14 +76,39 @@ MainMenu:
 @NoStop:
 
     btst.l  #7, d0                  ; Debug key
-    beq.s   @NoDebug
-    lea     (BGM_Test), a0            ; Play test BGM
-    ;bsr     Echo_PlayBGM
-    lea     (SFX_Test), a0            ; Play test SFX
-    bsr     Echo_PlaySFX
-@NoDebug:
+    beq.w	@NoPiano
+	
+	tst.b	(RAM_PianoActive)
+	bne.s	@ClearPiano
+	
+	bsr		DrawArrows2
+	
+	move.b	#1,(RAM_PianoActive)
+	bra.b	@PianoUpdate
+	
+@ClearPiano	
+	bsr		ClearPiano
+	bsr		ClearLine
+	
+	bsr		DrawArrows1
+	
+    moveq   #2, d0                  ; Write title
+    moveq   #1, d1
+    move.w  #$8000, d2
+    lea     (Str_Title1), a0
+    bsr     WriteString
+    addq.w  #2, d1
+    move.w  #$E000, d2
+    lea     (Str_Title2), a0
+    bsr     WriteString
+	
+	move.b	#0,(RAM_PianoActive)
+	
+@PianoUpdate
+    bsr     UpdateMenu                ; Update menu
+@NoPiano:
 
-    lea     (@ArrowPal), a0
+    lea     (MenuArrowPal), a0
 
     move.w  (RAM_LArrowAnim), d0    ; Animate left arrow
     move.l  (a0,d0.w), d1
@@ -102,11 +137,17 @@ MainMenu:
 
     bsr     VSync                   ; Next frame
     bsr     ReadJoypad
+
+	tst.b	(RAM_PianoActive)
+	beq.w	@MainLoop
+	
+	bsr		DrawPiano
+@NoUpdatePiano
     bra     @MainLoop
 
 ;****************************************************************************
 
-@ArrowPal:
+MenuArrowPal:
     dc.w    $00E, $00E, $02E, $02E, $04E, $04E, $06E, $06E
     dc.w    $28E, $28E, $4AE, $4AE, $6CE, $6CE, $8EE, $8EE
 
@@ -116,8 +157,11 @@ MainMenu:
 ;****************************************************************************
 
 UpdateMenu:
+	move.b	RAM_PianoActive,d0
+	tst.b	(RAM_PianoActive)
+	bne		@piano
+	
     bsr     ClearLines              ; Clear lines
-
     lea     (SongList), a1          ; Get address of song data
     move.w  (RAM_CurrSong), d0
     lsl.w   #4, d0
@@ -139,3 +183,18 @@ UpdateMenu:
     bsr     WriteString
 
     rts                             ; End of subroutine
+
+@piano
+    bsr     ClearLine              ; Clear lines
+    lea     (SongList), a1          ; Get address of song data
+    move.w  (RAM_CurrSong), d0
+    lsl.w   #4, d0
+    lea     (a1,d0.w), a1
+    addq.l  #4, a1
+
+    moveq   #7, d0                  ; Write song title
+    moveq   #21, d1
+    move.w  #$A000, d2
+    move.l  (a1)+, a0
+    bsr     WriteString
+	rts

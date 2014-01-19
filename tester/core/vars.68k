@@ -10,3 +10,7 @@ RAM_LArrowAnim      rs.w 1      ; Animation for left arrow
 RAM_RArrowAnim      rs.w 1      ; Animation for right arrow
 RAM_BGAnim          rs.w 1      ; Animation for background
 RAM_CurrSong        rs.w 1      ; Selected song
+RAM_EchoState       rs.b 48     ;
+RAM_PianoTileData	rs.w (36*20)*2 ; Tile data for piano screen
+RAM_TextBuffer		rs.w 1		; only used for hex
+RAM_PianoActive		rs.w 1		; Whether to display piano screen

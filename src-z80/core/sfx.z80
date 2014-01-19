@@ -207,12 +207,16 @@ ClearSFX:
     PollPCM
 
     ld a, b                       ; Restore BGM volume
+	if LogState
+		call StateRestorePSG
+	endif
+	
     rrca
     rrca
     rrca
     rrca
     dec a
-    ld h, RAM_PSGData>>8
+    ld h, >RAM_PSGData ;>>8
     ld l, a
     ld c, (hl)
     sub 15
@@ -268,6 +272,11 @@ ClearSFX:
     call RestoreFM
     inc b
     
+	if LogState
+		ld a,b
+		call StateRestoreFM
+	endif
+	
 .fmfree:
     dec e                         ; Go for next FM channel to unlock
     dec b

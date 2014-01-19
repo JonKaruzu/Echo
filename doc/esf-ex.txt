@@ -1,0 +1,125 @@
+Preliminary event list of ESF-EX
+================================
+
+		events marked * are unimplemented
+		events marked x are exclusive for EchoEx (for now)
+
+		$00nn ..... Note on FM channel #1
+		$01nn ..... Note on FM channel #2
+		$02nn ..... Note on FM channel #3
+		$04nn ..... Note on FM channel #4
+		$05nn ..... Note on FM channel #5
+		$06nn ..... Note on FM channel #6
+		$08nn ..... Note on PSG channel #1
+		$09nn ..... Note on PSG channel #2
+		$0Ann ..... Note on PSG channel #3
+		$0Bnn ..... Note on PSG channel #4
+		$0Cnn ..... Note on PCM channel
+		
+		$10 ....... Note off FM channel #1
+		$11 ....... Note off FM channel #2
+		$12 ....... Note off FM channel #3
+		$14 ....... Note off FM channel #4
+		$15 ....... Note off FM channel #5
+		$16 ....... Note off FM channel #6
+		$18 ....... Note off PSG channel #1
+		$19 ....... Note off PSG channel #2
+		$1A ....... Note off PSG channel #3
+		$1B ....... Note off PSG channel #4
+		$1C ....... Note off PCM channel
+		
+		$20nn ..... Set volume FM channel #1
+		$21nn ..... Set volume FM channel #2
+		$22nn ..... Set volume FM channel #3
+		$24nn ..... Set volume FM channel #4
+		$25nn ..... Set volume FM channel #5
+		$26nn ..... Set volume FM channel #6
+		$28nn ..... Set volume PSG channel #1
+		$29nn ..... Set volume PSG channel #2
+		$2Ann ..... Set volume PSG channel #3
+		$2Bnn ..... Set volume PSG channel #4
+		
+		$30nnnn ... Set frequency FM channel #1
+		$31nnnn ... Set frequency FM channel #2
+		$32nnnn ... Set frequency FM channel #3
+		$34nnnn ... Set frequency FM channel #4
+		$35nnnn ... Set frequency FM channel #5
+		$36nnnn ... Set frequency FM channel #6
+		$38nnnn ... Set frequency PSG channel #1
+		$39nnnn ... Set frequency PSG channel #2
+		$3Annnn ... Set frequency PSG channel #3
+		$3Bnn ..... Set noise type PSG channel #4
+		
+		$40nn ..... Set instrument FM channel #1
+		$41nn ..... Set instrument FM channel #2
+		$42nn ..... Set instrument FM channel #3
+		$44nn ..... Set instrument FM channel #4
+		$45nn ..... Set instrument FM channel #5
+		$46nn ..... Set instrument FM channel #6
+		$48nn ..... Set instrument PSG channel #1
+		$49nn ..... Set instrument PSG channel #2
+		$4Ann ..... Set instrument PSG channel #3
+		$4Bnn ..... Set instrument PSG channel #4
+
+	 *x $50nn-$55nn Set register #1 for FM channel 1-6
+	 *x $58nn-$5Dnn Set register #2 for FM channel 1-6
+	 *x $60nn-$65nn Set register #3 for FM channel 1-6
+	 *x $68nn-$6Dnn Set register #4 for FM channel 1-6
+	 *x $70nn-$75nn Set register #5 for FM channel 1-6
+	 *x $78nn-$7Dnn Set register #6 for FM channel 1-6
+	 *x $80nn-$85nn Set register #7 for FM channel 1-6
+	 *x $88nn-$8Dnn Set register #8 for FM channel 1-6
+		
+		$90-$9f.... Reserved.
+		
+	 *x $A0nn-$BFnn Reserved for MegaCD/32X (just in case)
+		
+		$C0-$CF.... Reserved.
+		
+	  x $Dn ....... Short delay.
+		
+		$E0 ....... [SFX] Lock FM channel #1
+		$E1 ....... [SFX] Lock FM channel #2
+		$E2 ....... [SFX] Lock FM channel #3
+		$E4 ....... [SFX] Lock FM channel #4
+		$E5 ....... [SFX] Lock FM channel #5
+		$E6 ....... [SFX] Lock FM channel #6
+		$E8 ....... [SFX] Lock PSG channel #1
+		$E9 ....... [SFX] Lock PSG channel #2
+		$EA ....... [SFX] Lock PSG channel #3
+		$EB ....... [SFX] Lock PSG channel #4
+		
+		$F0nn ..... Set parameters FM channel #1
+		$F1nn ..... Set parameters FM channel #2
+		$F2nn ..... Set parameters FM channel #3
+		$F4nn ..... Set parameters FM channel #4
+		$F5nn ..... Set parameters FM channel #5
+		$F6nn ..... Set parameters FM channel #6
+		
+	 *x	$F7nn ..... Set flag
+		
+		$FC ....... [BGM] Go to loop
+		$FD ....... [BGM] Set loop point
+		$FEnn ..... Delay ticks
+		$FF ....... Stop playback
+		
+
+ECHO BUGS
+=========
+
+* Playing a new song does not reset panning (Fixed in EX)
+
+
+"FIXED" BUGS
+============
+these bugs appear to be fixed but it cannot be 100% verified that they are.
+	
+* Fading out somettimes cause PSG tones AFTER fade is complete.
+	Calling StopBGM from 68k will prevent this...
+	even though StopBGM is called after fade out is complete.
+* SFX fades out with music (should not happen...)	
+
+KNOWN PROBLEMS
+==============
+
+?

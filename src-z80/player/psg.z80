@@ -138,10 +138,15 @@ NoteOnPSGSFX:
 
 NoteOnPSGBGM:
     ld b, a
-    PollPCM
+	
+	ld a, (RAM_BGMFadeOutVal)
+	cp $10	
+	jp nc, ProcessBGMSkip1      ; Don't play if fade > $10
+	
+	push hl
+	
+	PollPCM
     ld a, b
-
-    push hl
     and $03                     ; Check if channel is free
     ld hl, RAM_Locked+8
     add l
@@ -163,7 +168,7 @@ NoteOnPSG:
     PollPCM
 
     push hl                     ; Set channel volume
-    ld h, RAM_PSGData>>8
+    ld h, >RAM_PSGData	;>>8
     ld a, b
     rrca
     rrca
@@ -206,9 +211,13 @@ NoteOnPSG:
 
     ;pop af
     ex af, af'
+	
+	if LogState
+		call StateNoteOnPSG
+	endif
     push hl
     push de
-    ld h, PSGFreqTable>>8       ; Get address of frequency data
+    ld h, >PSGFreqTable; >>8       ; Get address of frequency data
     ld l, b
     ld de, $7F11
 
@@ -283,6 +292,10 @@ SetNoteNoise:
     call GetParam               ; Get noise type
     PollPCM
 
+	if LogState
+		call StateNoteOnNoise
+	endif
+	
     ld a, $E0                   ; Set new noise type
     or b
     ld ($7F11), a
@@ -319,11 +332,15 @@ NoteOffPSGBGM:
 
 NoteOffPSG:
     and $03
+	if LogState
+		call StateNoteOffPSG
+	endif
+	
     ld b, a
     PollPCM
 
     push hl                     ; Mark channel as not playing
-    ld h, RAM_PSGData>>8
+    ld h, >RAM_PSGData ;>>8
     ld a, b
     rrca
     rrca
@@ -352,7 +369,7 @@ SetPSGVolSFX:
     ex af, af'
 
     push hl
-    ld h, RAM_PSGData>>8        ; Set new volume
+    ld h, >RAM_PSGData ;>>8        ; Set new volume
     rrca
     rrca
     rrca
@@ -372,9 +389,13 @@ SetPSGVolBGM:
     ex af, af'
     PollPCM
     call GetParam               ; Get volume
+	
+	ld a,b						; Get fade out value
+	call GetPSGFadeVal
+	ld b,a
     PollPCM
     ex af, af'
-
+	
     push de
     push hl
 
@@ -388,7 +409,7 @@ SetPSGVolBGM:
     PollPCM
     pop af
 
-    ld h, RAM_PSGData>>8        ; Store new volume
+    ld h, >RAM_PSGData ;>>8        ; Store new volume
     rrca
     rrca
     rrca
@@ -420,6 +441,26 @@ SetPSGVolBGM:
     jp ProcessBGMRun            ; End of subroutine
 
 ;****************************************************************************
+; GetPSGFadeVal
+; Subroutine to get the PSG fade value
+;****************************************************************************
+
+GetPSGFadeVal:
+	
+	push hl
+;	ld hl, RAM_BGMFadeOut		; Get BGM fade out status
+;	bit 0,(hl)
+;	jr z, .nonzero				; Ignore if BGM is not fading out
+	ld hl, RAM_BGMFadeOutVal
+	add (hl)
+	cp $10
+	jr c, .nonzero	
+	ld a,$0f
+.nonzero
+	pop hl
+	ret
+	
+;****************************************************************************
 ; LoadPSG*
 ; Loads a PSG instrument
 ;****************************************************************************
@@ -432,14 +473,17 @@ LoadPSGSFX:
     call GetParam               ; Get instrument ID
     PollPCM
     ex af, af'
+	if LogState
+		call StateInstrumentPSG
+	endif
 
     push de
     push hl
 
-    ld d, RAM_PointerList>>8    ; Get position in pointer list
+    ld d, >RAM_PointerList ;>>8    ; Get position in pointer list
     ld e, b
 
-    ld h, RAM_PSGData>>8        ; Where to store address
+    ld h, >RAM_PSGData ;>>8        ; Where to store address
     rrca
     rrca
     rrca
@@ -465,7 +509,8 @@ LoadPSGSFX:
     ld a, l                     ; Reset volume
     sub 8
     ld l, a
-    ld (hl), $00
+	
+    ld (hl), a
 
     pop hl
     pop de
@@ -482,10 +527,14 @@ LoadPSGBGM:
     PollPCM
     ex af, af'
 
+	if LogState
+		call StateInstrumentPSG	; This will still run if SFX is running.
+								; Cba to fix that right now
+	endif
     push de
     push hl
 
-    ld d, RAM_PointerList>>8    ; Get position in pointer list
+    ld d, >RAM_PointerList ;>>8    ; Get position in pointer list
     ld e, b
 
     ld hl, RAM_Locked+8         ; Get if channel is locked
@@ -495,7 +544,7 @@ LoadPSGBGM:
     pop af
     ld b, (hl)
 
-    ld h, RAM_PSGData>>8        ; Where to store BGM instrument data
+    ld h, >RAM_PSGData ;>>8        ; Where to store BGM instrument data
     rrca
     rrca
     rrca
@@ -505,6 +554,9 @@ LoadPSGBGM:
 
     PollPCM
     
+	ld a,b
+	call GetPSGFadeVal
+	
     ld (hl), a                  ; Reset volume for BGM
     dec l
 
@@ -551,7 +603,16 @@ LoadPSGBGM:
     ld a, l                     ; Reset volume
     sub 8
     ld l, a
-    ld (hl), $00
+	
+;	push hl
+	
+	PollPCM
+	
+	ld a,b
+	call GetPSGFadeVal
+;	pop hl
+
+    ld (hl), a
 
     pop hl
     pop de
@@ -573,7 +634,7 @@ SetNotePSGBGM:
 
     push hl
     and $0F                     ; Check if channel is free
-    ld h, RAM_Locked>>8
+    ld h, >RAM_Locked ;>>8
     add RAM_Locked&$FF
     ld l, a
     ld a, (hl)
@@ -639,11 +700,15 @@ SetNoteNoiseBGM:
 
 LockChannelPSG:
     and $03
+	if LogState
+		call StateLockPSG
+	endif
+	
     ld b, a
     PollPCM
     push hl
 
-    ld h, RAM_Locked>>8         ; Get address of channel to lock
+    ld h, >RAM_Locked ;>>8         ; Get address of channel to lock
     ld a, b
     add (RAM_Locked&$FF)+8
     ld l, a
@@ -658,7 +723,7 @@ LockChannelPSG:
     rrca
     rrca
     ld l, a
-    ld h, RAM_PSGData>>8
+    ld h, >RAM_PSGData ;>>8
     ld (hl), $00
 
     pop hl

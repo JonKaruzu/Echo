@@ -1,6 +1,36 @@
 ;****************************************************************************
+; SetShortDelay* [event $Dn]
+; Adds a delay in playback (up to 16 ticks)
+;****************************************************************************
+
+SetShortDelaySFX:
+    call SetShortDelay          ; We're just a wrapper
+    jp DoTick_SFXSkip           ; End of subroutine
+
+SetShortDelayBGM:
+    call SetShortDelay          ; We're just a wrapper
+    jp DoTick_BGMSkip           ; End of subroutine
+
+SetShortDelay:
+    and $0F                     ; get the delay nibble
+    ld b, a
+    PollPCM
+	
+	ex de, hl
+    ld (hl), d                  ; Store new address
+    dec l
+    ld (hl), e
+    dec l
+    ld (hl), c
+	
+	dec l                       ; Store new delay
+;    ex de, hl
+	inc b
+    ld (hl), b
+	ret
+;****************************************************************************
 ; SetDelay* [event $FE]
-; Adds a delay in playback
+; Adds a delay in playback (up to 255 ticks)
 ;****************************************************************************
 
 SetDelaySFX:

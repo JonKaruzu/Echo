@@ -14,6 +14,21 @@
     _| | | | | | | | | | | |_| | | | | | | | |_  | | | __|   /_  | |_| |_
    |___|___|___|_|_|__/  |___|_|_|___|_|_|_|___|  \_/|___|_|_\_| |_|_|___|
 
+	Extended version 1.0
+	
+=============================================================================
+
+*** Echo-Ex ***
+
+Features new features for both composing and playback, including:
+
+   * Short delay command for smaller filesizes
+   * BGM Fade outs
+   * More transparent to the 68K
+   * Builds with vasm with "old-style" syntax
+     (Windows binary provided, can be easily built from source with other
+	  operating systems)
+
 =============================================================================
 
 Echo is available under the zlib license. Please see the LICENSE file for
@@ -22,6 +37,9 @@ explicitly stated otherwise.
 
 Echo official "site" (currently redirects to the repo):
 http://echo.mdscene.net/
+
+Echo-Ex repo:
+https://github.com/superctr/Echo
 
 mdtools repo (includes several tools for use with Echo):
 http://tools.mdscene.net/
@@ -33,7 +51,7 @@ https://github.com/oerg866/xm2esf
 
 *** How to use ***
 
-If you want to use Echo from asm, take the blob from "built/prog-z80.bin" and
+If you want to use Echo from asm, take the blob from "echo.bin" and
 the "src-68k/echo.68k" asm file. Include the latter in your source code, then
 go to the @Z80Program label (should be near the end of the file) and replace
 the string with the path to the blob.

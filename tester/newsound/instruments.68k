@@ -1,0 +1,984 @@
+;
+; Instruments for EchoEx demo
+;
+
+PointerList:
+
+	Echo_ListEntry	instr_00 ; 00
+	Echo_ListEntry	instr_01 ; 01
+	Echo_ListEntry	instr_02 ; 02
+	Echo_ListEntry	instr_03 ; 03
+	Echo_ListEntry	instr_04 ; 04
+	Echo_ListEntry	instr_05 ; 05
+	Echo_ListEntry	instr_06 ; 06
+	Echo_ListEntry	psg_simple ; 07
+	Echo_ListEntry	sample01 ; 08
+	Echo_ListEntry	sample00 ; 09
+	Echo_ListEntry	instr_0a ; 00
+	Echo_ListEntry	instr_0b ; 01
+	Echo_ListEntry	instr_0c ; 02
+	Echo_ListEntry	instr_0d ; 03
+	Echo_ListEntry	instr_0e ; 04
+	Echo_ListEntry	instr_0f ; 05
+	Echo_ListEntry	instr_10 ; 06
+	Echo_ListEntry	instr_11 ; 06
+	Echo_ListEntry	psg_12 ; 06
+	Echo_ListEntry	psg_13 ; 06
+	Echo_ListEntry	instr_14 ; 06
+	Echo_ListEntry	instr_15 ; 06
+	Echo_ListEntry	instr_16 ; 06
+	Echo_ListEntry	psg_17 ; 06
+	Echo_ListEntry	instr_18 ; 06
+	Echo_ListEntry	instr_19 ; 06
+	Echo_ListEntry	psg_1a ; 06
+	Echo_ListEntry	psg_1b ; 06
+	Echo_ListEnd
+	
+eif: macro
+	dc.b	(alg|(fb<<3))
+	dc.b	(mul1|(dt1<<4)),(mul2|(dt2<<4)),(mul3|(dt3<<4)),(mul4|(dt4<<4))
+	dc.b	tl1,tl2,tl3,tl4
+	dc.b	(ar1|(rs1<<6)),(ar2|(rs2<<6)),(ar3|(rs3<<6)),(ar4|(rs4<<6))
+	dc.b	dr1,dr2,dr3,dr4
+	dc.b	sr1,sr2,sr3,sr4
+	dc.b	(rr1|(sl1<<4)),(rr2|(sl2<<4)),(rr3|(sl3<<4)),(rr4|(sl4<<4))
+	dc.b	ssg1,ssg2,ssg3,ssg4
+	endm
+
+instr_00 ; FM Instrument 0
+alg  = 0
+fb   = 3
+ar1  = 30
+dr1  = 13
+sr1  = 8
+rr1  = 15
+tl1  = 50
+sl1  = 11
+mul1 = 7
+dt1  = 3
+rs1  = 2
+ssg1 = $00
+ar2  = 28
+dr2  = 4
+sr2  = 3
+rr2  = 15
+tl2  = 20
+sl2  = 3
+mul2 = 0
+dt2  = 3
+rs2  = 0
+ssg2 = $00
+ar3  = 28
+dr3  = 6
+sr3  = 10
+rr3  = 15
+tl3  = 34
+sl3  = 11
+mul3 = 0
+dt3  = 3
+rs3  = 3
+ssg3 = $00
+ar4  = 28
+dr4  = 1
+sr4  = 5
+rr4  = 15
+tl4  = 11
+sl4  = 2
+mul4 = 1
+dt4  = 3
+rs4  = 2
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_01 ; FM Instrument 1
+alg  = 4
+fb   = 7
+ar1  = 18
+dr1  = 8
+sr1  = 4
+rr1  = 0
+tl1  = 26
+sl1  = 1
+mul1 = 1
+dt1  = 3
+rs1  = 1
+ssg1 = $00
+ar2  = 18
+dr2  = 8
+sr2  = 4
+rr2  = 0
+tl2  = 22
+sl2  = 1
+mul2 = 0
+dt2  = 5
+rs2  = 1
+ssg2 = $00
+ar3  = 19
+dr3  = 0
+sr3  = 0
+rr3  = 7
+tl3  = 17
+sl3  = 0
+mul3 = 2
+dt3  = 5
+rs3  = 1
+ssg3 = $00
+ar4  = 19
+dr4  = 0
+sr4  = 0
+rr4  = 7
+tl4  = 17
+sl4  = 0
+mul4 = 0
+dt4  = 3
+rs4  = 1
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_02 ; FM Instrument 2
+alg  = 4
+fb   = 0
+ar1  = 31
+dr1  = 7
+sr1  = 0
+rr1  = 0
+tl1  = 35
+sl1  = 1
+mul1 = 7
+dt1  = 3
+rs1  = 0
+ssg1 = $00
+ar2  = 31
+dr2  = 7
+sr2  = 0
+rr2  = 0
+tl2  = 35
+sl2  = 1
+mul2 = 7
+dt2  = 7
+rs2  = 0
+ssg2 = $00
+ar3  = 31
+dr3  = 10
+sr3  = 0
+rr3  = 7
+tl3  = 25
+sl3  = 0
+mul3 = 2
+dt3  = 7
+rs3  = 0
+ssg3 = $00
+ar4  = 31
+dr4  = 13
+sr4  = 0
+rr4  = 7
+tl4  = 25
+sl4  = 0
+mul4 = 9
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_03 ; FM Instrument 3
+alg  = 2
+fb   = 7
+ar1  = 13
+dr1  = 9
+sr1  = 1
+rr1  = 15
+tl1  = 24
+sl1  = 5
+mul1 = 1
+dt1  = 0
+rs1  = 2
+ssg1 = $00
+ar2  = 7
+dr2  = 0
+sr2  = 2
+rr2  = 15
+tl2  = 24
+sl2  = 0
+mul2 = 1
+dt2  = 0
+rs2  = 0
+ssg2 = $00
+ar3  = 7
+dr3  = 0
+sr3  = 2
+rr3  = 15
+tl3  = 34
+sl3  = 0
+mul3 = 1
+dt3  = 0
+rs3  = 0
+ssg3 = $00
+ar4  = 18
+dr4  = 3
+sr4  = 0
+rr4  = 15
+tl4  = 20
+sl4  = 2
+mul4 = 2
+dt4  = 0
+rs4  = 1
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_04 ; FM Instrument 4
+alg  = 5
+fb   = 7
+ar1  = 31
+dr1  = 7
+sr1  = 0
+rr1  = 15
+tl1  = 23
+sl1  = 1
+mul1 = 1
+dt1  = 0
+rs1  = 0
+ssg1 = $00
+ar2  = 16
+dr2  = 31
+sr2  = 0
+rr2  = 15
+tl2  = 36
+sl2  = 0
+mul2 = 2
+dt2  = 0
+rs2  = 0
+ssg2 = $00
+ar3  = 16
+dr3  = 31
+sr3  = 0
+rr3  = 15
+tl3  = 37
+sl3  = 0
+mul3 = 2
+dt3  = 0
+rs3  = 0
+ssg3 = $00
+ar4  = 16
+dr4  = 31
+sr4  = 0
+rr4  = 15
+tl4  = 36
+sl4  = 0
+mul4 = 2
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_05 ; FM Instrument 5
+alg  = 5
+fb   = 7
+ar1  = 31
+dr1  = 7
+sr1  = 0
+rr1  = 15
+tl1  = 23
+sl1  = 1
+mul1 = 1
+dt1  = 1
+rs1  = 0
+ssg1 = $00
+ar2  = 16
+dr2  = 31
+sr2  = 0
+rr2  = 15
+tl2  = 36
+sl2  = 0
+mul2 = 2
+dt2  = 1
+rs2  = 0
+ssg2 = $00
+ar3  = 16
+dr3  = 31
+sr3  = 0
+rr3  = 15
+tl3  = 37
+sl3  = 0
+mul3 = 2
+dt3  = 0
+rs3  = 0
+ssg3 = $00
+ar4  = 16
+dr4  = 31
+sr4  = 0
+rr4  = 15
+tl4  = 36
+sl4  = 0
+mul4 = 2
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_06 ; FM Instrument 6
+alg  = 4
+fb   = 5
+ar1  = 31
+dr1  = 0
+sr1  = 0
+rr1  = 15
+tl1  = 22
+sl1  = 0
+mul1 = 4
+dt1  = 7
+rs1  = 0
+ssg1 = $00
+ar2  = 31
+dr2  = 0
+sr2  = 0
+rr2  = 15
+tl2  = 23
+sl2  = 0
+mul2 = 4
+dt2  = 3
+rs2  = 0
+ssg2 = $00
+ar3  = 31
+dr3  = 0
+sr3  = 1
+rr3  = 15
+tl3  = 22
+sl3  = 3
+mul3 = 4
+dt3  = 7
+rs3  = 0
+ssg3 = $00
+ar4  = 31
+dr4  = 0
+sr4  = 1
+rr4  = 15
+tl4  = 22
+sl4  = 3
+mul4 = 4
+dt4  = 3
+rs4  = 0
+ssg4 = $00
+	eif
+	
+instr_0a ; FM Instrument 0
+alg  = 6
+fb   = 6
+ar1  = 31
+dr1  = 18
+sr1  = 0
+rr1  = 15
+tl1  = 24
+sl1  = 15
+mul1 = 15
+dt1  = 0
+rs1  = 0
+ssg1 = $00
+ar2  = 31
+dr2  = 14
+sr2  = 7
+rr2  = 15
+tl2  = 18
+sl2  = 1
+mul2 = 1
+dt2  = 0
+rs2  = 0
+ssg2 = $00
+ar3  = 31
+dr3  = 17
+sr3  = 10
+rr3  = 15
+tl3  = 18
+sl3  = 0
+mul3 = 1
+dt3  = 0
+rs3  = 0
+ssg3 = $00
+ar4  = 31
+dr4  = 0
+sr4  = 9
+rr4  = 15
+tl4  = 18
+sl4  = 0
+mul4 = 1
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+instr_0b ; FM Instrument 1
+alg  = 4
+fb   = 5
+ar1  = 31
+dr1  = 0
+sr1  = 0
+rr1  = 0
+tl1  = 22
+sl1  = 0
+mul1 = 4
+dt1  = 7
+rs1  = 0
+ssg1 = $00
+ar2  = 31
+dr2  = 0
+sr2  = 0
+rr2  = 0
+tl2  = 23
+sl2  = 0
+mul2 = 4
+dt2  = 3
+rs2  = 0
+ssg2 = $00
+ar3  = 18
+dr3  = 7
+sr3  = 7
+rr3  = 8
+tl3  = 18
+sl3  = 3
+mul3 = 4
+dt3  = 7
+rs3  = 0
+ssg3 = $00
+ar4  = 31
+dr4  = 7
+sr4  = 7
+rr4  = 8
+tl4  = 18
+sl4  = 3
+mul4 = 4
+dt4  = 3
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+instr_0c ; FM Instrument 2
+alg  = 4
+fb   = 5
+ar1  = 31
+dr1  = 0
+sr1  = 0
+rr1  = 15
+tl1  = 22
+sl1  = 0
+mul1 = 4
+dt1  = 7
+rs1  = 0
+ssg1 = $00
+ar2  = 31
+dr2  = 0
+sr2  = 0
+rr2  = 15
+tl2  = 23
+sl2  = 0
+mul2 = 4
+dt2  = 3
+rs2  = 0
+ssg2 = $00
+ar3  = 18
+dr3  = 0
+sr3  = 1
+rr3  = 15
+tl3  = 20
+sl3  = 3
+mul3 = 4
+dt3  = 7
+rs3  = 0
+ssg3 = $00
+ar4  = 31
+dr4  = 0
+sr4  = 1
+rr4  = 15
+tl4  = 20
+sl4  = 3
+mul4 = 4
+dt4  = 3
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+instr_0d ; FM Instrument 3
+alg  = 0
+fb   = 4
+ar1  = 31
+dr1  = 7
+sr1  = 7
+rr1  = 0
+tl1  = 25
+sl1  = 2
+mul1 = 6
+dt1  = 3
+rs1  = 3
+ssg1 = $00
+ar2  = 31
+dr2  = 9
+sr2  = 6
+rr2  = 0
+tl2  = 19
+sl2  = 1
+mul2 = 0
+dt2  = 3
+rs2  = 2
+ssg2 = $00
+ar3  = 31
+dr3  = 6
+sr3  = 6
+rr3  = 0
+tl3  = 55
+sl3  = 1
+mul3 = 5
+dt3  = 3
+rs3  = 3
+ssg3 = $00
+ar4  = 31
+dr4  = 6
+sr4  = 8
+rr4  = 8
+tl4  = 11
+sl4  = 15
+mul4 = 1
+dt4  = 3
+rs4  = 2
+ssg4 = $00
+	eif
+; end of instrument
+instr_0e ; FM Instrument 4
+alg  = 4
+fb   = 0
+ar1  = 18
+dr1  = 0
+sr1  = 0
+rr1  = 15
+tl1  = 35
+sl1  = 0
+mul1 = 2
+dt1  = 7
+rs1  = 0
+ssg1 = $00
+ar2  = 18
+dr2  = 0
+sr2  = 0
+rr2  = 15
+tl2  = 35
+sl2  = 0
+mul2 = 2
+dt2  = 3
+rs2  = 0
+ssg2 = $00
+ar3  = 18
+dr3  = 8
+sr3  = 8
+rr3  = 15
+tl3  = 10
+sl3  = 1
+mul3 = 2
+dt3  = 0
+rs3  = 0
+ssg3 = $00
+ar4  = 18
+dr4  = 8
+sr4  = 8
+rr4  = 15
+tl4  = 10
+sl4  = 1
+mul4 = 2
+dt4  = 3
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+instr_0f ; FM Instrument 5
+alg  = 5
+fb   = 7
+ar1  = 16
+dr1  = 7
+sr1  = 1
+rr1  = 0
+tl1  = 28
+sl1  = 2
+mul1 = 1
+dt1  = 0
+rs1  = 0
+ssg1 = $00
+ar2  = 16
+dr2  = 8
+sr2  = 0
+rr2  = 7
+tl2  = 26
+sl2  = 1
+mul2 = 2
+dt2  = 0
+rs2  = 1
+ssg2 = $00
+ar3  = 16
+dr3  = 8
+sr3  = 0
+rr3  = 7
+tl3  = 26
+sl3  = 1
+mul3 = 2
+dt3  = 0
+rs3  = 1
+ssg3 = $00
+ar4  = 16
+dr4  = 8
+sr4  = 0
+rr4  = 7
+tl4  = 26
+sl4  = 1
+mul4 = 2
+dt4  = 0
+rs4  = 1
+ssg4 = $00
+	eif
+; end of instrument
+instr_10 ; FM Instrument 6
+alg  = 0
+fb   = 1
+ar1  = 31
+dr1  = 18
+sr1  = 0
+rr1  = 15
+tl1  = 36
+sl1  = 2
+mul1 = 10
+dt1  = 0
+rs1  = 0
+ssg1 = $00
+ar2  = 31
+dr2  = 10
+sr2  = 4
+rr2  = 15
+tl2  = 19
+sl2  = 2
+mul2 = 0
+dt2  = 3
+rs2  = 1
+ssg2 = $00
+ar3  = 31
+dr3  = 14
+sr3  = 4
+rr3  = 15
+tl3  = 45
+sl3  = 2
+mul3 = 0
+dt3  = 7
+rs3  = 0
+ssg3 = $00
+ar4  = 31
+dr4  = 10
+sr4  = 3
+rr4  = 15
+tl4  = 11
+sl4  = 2
+mul4 = 0
+dt4  = 0
+rs4  = 1
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_11 ; FM Instrument 0
+alg  = 5
+fb   = 7
+ar1  = 15
+dr1  = 10
+sr1  = 0
+rr1  = 6
+tl1  = 47
+sl1  = 5
+mul1 = 1
+dt1  = 0
+rs1  = 0
+ssg1 = $00
+ar2  = 15
+dr2  = 5
+sr2  = 0
+rr2  = 4
+tl2  = 18
+sl2  = 2
+mul2 = 1
+dt2  = 5
+rs2  = 0
+ssg2 = $00
+ar3  = 15
+dr3  = 5
+sr3  = 0
+rr3  = 5
+tl3  = 18
+sl3  = 2
+mul3 = 2
+dt3  = 2
+rs3  = 0
+ssg3 = $00
+ar4  = 15
+dr4  = 4
+sr4  = 0
+rr4  = 4
+tl4  = 18
+sl4  = 2
+mul4 = 1
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+instr_14 ; FM Instrument 3
+alg  = 1
+fb   = 7
+ar1  = 31
+dr1  = 10
+sr1  = 8
+rr1  = 4
+tl1  = 34
+sl1  = 2
+mul1 = 13
+dt1  = 0
+rs1  = 2
+ssg1 = $00
+ar2  = 31
+dr2  = 9
+sr2  = 7
+rr2  = 4
+tl2  = 38
+sl2  = 2
+mul2 = 1
+dt2  = 0
+rs2  = 0
+ssg2 = $00
+ar3  = 31
+dr3  = 9
+sr3  = 7
+rr3  = 4
+tl3  = 36
+sl3  = 2
+mul3 = 2
+dt3  = 0
+rs3  = 0
+ssg3 = $00
+ar4  = 31
+dr4  = 4
+sr4  = 7
+rr4  = 8
+tl4  = 0
+sl4  = 2
+mul4 = 1
+dt4  = 0
+rs4  = 1
+ssg4 = $00
+	eif
+; end of instrument
+instr_15 ; FM Instrument 4
+alg  = 5
+fb   = 7
+ar1  = 15
+dr1  = 10
+sr1  = 0
+rr1  = 6
+tl1  = 35
+sl1  = 5
+mul1 = 1
+dt1  = 0
+rs1  = 0
+ssg1 = $00
+ar2  = 15
+dr2  = 5
+sr2  = 0
+rr2  = 4
+tl2  = 6
+sl2  = 2
+mul2 = 1
+dt2  = 5
+rs2  = 0
+ssg2 = $00
+ar3  = 15
+dr3  = 5
+sr3  = 0
+rr3  = 5
+tl3  = 6
+sl3  = 2
+mul3 = 2
+dt3  = 2
+rs3  = 0
+ssg3 = $00
+ar4  = 15
+dr4  = 4
+sr4  = 0
+rr4  = 4
+tl4  = 6
+sl4  = 2
+mul4 = 1
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+	eif
+instr_16 ; FM Instrument 0
+alg  = 2
+fb   = 7
+ar1  = 18
+dr1  = 4
+sr1  = 2
+rr1  = 8
+tl1  = 27+5
+sl1  = 1
+mul1 = 2
+dt1  = 3
+rs1  = 0
+ssg1 = $00
+ar2  = 20
+dr2  = 0
+sr2  = 2
+rr2  = 8
+tl2  = 36+5
+sl2  = 0
+mul2 = 2
+dt2  = 7
+rs2  = 0
+ssg2 = $00
+ar3  = 14
+dr3  = 14
+sr3  = 0
+rr3  = 8
+tl3  = 33+5
+sl3  = 5
+mul3 = 8
+dt3  = 0
+rs3  = 1
+ssg3 = $00
+ar4  = 17
+dr4  = 4
+sr4  = 1
+rr4  = 8
+tl4  = 0
+sl4  = 3
+mul4 = 2
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+	eif
+; end of instrument
+
+instr_18 ; FM Instrument 0
+alg  = 5
+fb   = 7
+ar1  = 14
+dr1  = 0
+sr1  = 9
+rr1  = 12
+tl1  = 26
+sl1  = 0
+mul1 = 0
+dt1  = 0
+rs1  = 2
+ssg1 = $00
+ar2  = 20
+dr2  = 15
+sr2  = 6
+rr2  = 8
+tl2  = 12
+sl2  = 1
+mul2 = 1
+dt2  = 2
+rs2  = 1
+ssg2 = $00
+ar3  = 14
+dr3  = 15
+sr3  = 6
+rr3  = 8
+tl3  = 12
+sl3  = 1
+mul3 = 0
+dt3  = 1
+rs3  = 1
+ssg3 = $00
+ar4  = 18
+dr4  = 15
+sr4  = 0
+rr4  = 12
+tl4  = 12
+sl4  = 2
+mul4 = 1
+dt4  = 3
+rs4  = 1
+ssg4 = $00
+        eif
+; end of instrument
+instr_19 ; FM Instrument 1
+alg  = 4
+fb   = 0
+ar1  = 31
+dr1  = 31
+sr1  = 0
+rr1  = 0
+tl1  = 38
+sl1  = 0
+mul1 = 0
+dt1  = 0
+rs1  = 0
+ssg1 = $00
+ar2  = 11
+dr2  = 31
+sr2  = 0
+rr2  = 3
+tl2  = 56
+sl2  = 0
+mul2 = 1
+dt2  = 0
+rs2  = 0
+ssg2 = $00
+ar3  = 17
+dr3  = 31
+sr3  = 8
+rr3  = 8
+tl3  = 16
+sl3  = 0
+mul3 = 1
+dt3  = 0
+rs3  = 0
+ssg3 = $00
+ar4  = 24
+dr4  = 31
+sr4  = 5
+rr4  = 8
+tl4  = 9
+sl4  = 0
+mul4 = 0
+dt4  = 0
+rs4  = 0
+ssg4 = $00
+        eif
+; end of instrument
+
+psg_simple:
+	dc.b	$00,$FE,$00,$FF
+	
+psg_12:
+	dc.b	$00,$01,$02,$03,$04,$05,$06,$07
+	dc.b	$02,$03,$04,$05,$06,$07,$08,$09
+	dc.b	$0a,$0b,$0c,$0d,$fe,$0e,$ff
+
+psg_13:
+	dc.b	$00,$00,$01,$01,$02,$03,$03,$04
+	dc.b	$05,$05,$06,$07,$07,$08,$09,$09
+	dc.b	$0a,$0a,$0b,$0c,$0c,$0d,$0e,$0e
+	dc.b	$0f,$fe,$0f,$ff
+	
+psg_17:
+	dc.b	$05,$08,$fe,$09,$ff,$ff
+		
+psg_1a:
+	dc.b	$00,$02,$05,$fe,$0f,$ff
+psg_1b:
+	dc.b	$00,$fe,$01,$ff
+			
+sample00:
+	incbin	"data/pcm/powerkick.ewf"
+	even
+sample01:
+	incbin	"data/pcm/powersnare.ewf"
+	even
+	

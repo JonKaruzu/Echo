@@ -4,6 +4,52 @@
 ;****************************************************************************
 
 SongList:
+	if NewSongs
+	
+	dc.l	BGM_GHZ, @Str_GHZ_1, @Str_GHZ_2, @Str_GHZ_3
+	dc.l	BGM_SYZ, @Str_SYZ_1, @Str_SYZ_2, @Str_SYZ_3
+	dc.l	BGM_TPLake, @Str_TPLake_1, @Str_TPLake_2, @Str_TPLake_3
+	dc.l	BGM_MegaCD, @Str_MegaCD_1, @Str_MegaCD_2, @Str_MegaCD_3
+	dc.l	BGM_Versus, @Str_Versus_1, @Str_Versus_2, @Str_Versus_3
+	dc.l	SFX_Select, @Str_SFX_Beep, @Str_Null, @Str_Null
+	dc.l	SFX_Confirm, @Str_SFX_Confirm, @Str_Null, @Str_Null
+	
+@Str_Null:          dc.b 0
+
+                       ; 012345678901234567890123456
+@Str_GHZ_1:         dc.b "Green Hill Zone", 0
+@Str_GHZ_2:         dc.b "DMF by Delek", 0
+@Str_GHZ_3:         dc.b "Converted by ctr", 0
+
+                       ; 012345678901234567890123456
+@Str_SYZ_1:         dc.b "Spring Yard Zone", 0
+@Str_SYZ_2:         dc.b "DMF by Delek", 0
+@Str_SYZ_3:         dc.b "Converted by ctr", 0
+
+                       ; 012345678901234567890123456
+@Str_TPLake_1:      dc.b "Lake Hylia", 0
+@Str_TPLake_2:      dc.b "from Twilight Princess.", 0
+@Str_TPLake_3:      dc.b "DMF & Converted by ctr", 0
+
+                       ; 012345678901234567890123456
+@Str_MegaCD_1:      dc.b "MegaCD BIOS tune", 0
+@Str_MegaCD_2:      dc.b "Unknown composer.", 0
+@Str_MegaCD_3:      dc.b "DMF & Converted by ctr", 0
+
+                       ; 012345678901234567890123456
+@Str_Versus_1:      dc.b "Versus 7", 0
+@Str_Versus_2:      dc.b "from Sonic Advance 3", 0
+@Str_Versus_3:      dc.b "DMF & Converted by ctr", 0
+
+@Str_SFX_Beep:      dc.b "[SFX] Beep", 0
+@Str_SFX_Confirm:   dc.b "[SFX] Confirm", 0
+
+	even
+
+NumSongs		equ 7
+SFXThreshold	equ 5
+	else
+	
     dc.l    BGM_Midnas, @Str_Midnas_1, @Str_Midnas_2, @Str_Midnas_3
     dc.l    BGM_Nelpel, @Str_Nelpel_1, @Str_Nelpel_2, @Str_Nelpel_3
     dc.l    BGM_Megajysays, @Str_Megajysays_1, @Str_Megajysays_2, @Str_Megajysays_3
@@ -64,10 +110,12 @@ SongList:
 @Str_FluteTest_3:   dc.b "Feels so calm...", 0
 
     even
-
+	
 ;****************************************************************************
 ; NumSongs
 ; Number of songs in song list
 ;****************************************************************************
 
-NumSongs equ 10
+NumSongs		equ 10
+SFXThreshold	equ 10
+	endc

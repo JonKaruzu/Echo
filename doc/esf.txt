@@ -85,6 +85,8 @@ EVENT LIST
     $4Ann ..... Set instrument PSG channel #3
     $4Bnn ..... Set instrument PSG channel #4
     
+	$Dn ....... Delay ticks
+	
     $E0 ....... [SFX] Lock FM channel #1
     $E1 ....... [SFX] Lock FM channel #2
     $E2 ....... [SFX] Lock FM channel #3
@@ -288,6 +290,18 @@ $4Bnn: Set instrument PSG channel #4
 
 =============================================================================
 
+$Dn: Delay ticks
+
+    This event is used for timing. It tells Echo to wait a specific amount of
+    ticks before continuing with the stream. The low nibble is the amount of
+	ticks to wait. $D0 will delay 1 tick, $DF will delay 16 ticks.
+    
+    If you need to wait more than 16 ticks, use event $FE instead.
+    
+    One tick lasts 1/60th of a second.
+
+=============================================================================
+
 $E0: Lock FM channel #1 [SFX ONLY]
 $E1: Lock FM channel #2 [SFX ONLY]
 $E2: Lock FM channel #3 [SFX ONLY]
@@ -306,7 +320,7 @@ $EB: Lock PSG channel #1 [SFX ONLY]
     
     To lock the PCM channel, you need to lock FM channel #6 (event $E6). Echo
     will behave accordingly.
-
+	
 =============================================================================
 
 $F0: Set parameters FM channel #1

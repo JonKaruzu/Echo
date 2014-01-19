@@ -1,0 +1,372 @@
+;==============================================================================
+; Piano screen
+;==============================================================================
+
+	even
+	
+PianoOctavePatterns:
+	dc.w	$0100, $0101, $0102, $0101, $0103, $0100, $0103 ; 7 words/14 bytes
+PianoOctavePatterns1:
+	dc.w	$0104, $0101, $0102, $0101, $0103, $0100, $0103 ; C
+	dc.w	$0108, $0101, $0102, $0101, $0103, $0100, $0103 ; C#
+	dc.w	$010C, $0101, $0102, $0101, $0103, $0100, $0103 ; D
+	dc.w	$0120, $0105, $0102, $0101, $0103, $0100, $0103 ; D#
+	dc.w	$0100, $0109, $0102, $0101, $0103, $0100, $0103 ; E
+	dc.w	$0100, $010D, $0102, $0101, $0103, $0100, $0103 ; F
+	dc.w	$0100, $0121, $0106, $0101, $0103, $0100, $0103 ; F#
+	dc.w	$0100, $0101, $010A, $0101, $0103, $0100, $0103 ; G
+	dc.w	$0100, $0101, $010E, $0101, $0103, $0100, $0103 ; G#
+	dc.w	$0100, $0101, $0122, $0101, $0103, $0100, $0103 ; A
+	dc.w	$0100, $0101, $0125, $0105, $0103, $0100, $0103 ; A#
+	dc.w	$0100, $0101, $0102, $0109, $0103, $0100, $0103 ; B
+	dc.w	$0100, $0101, $0102, $010D, $0103, $0100, $0103 ; C
+	dc.w	$0100, $0101, $0102, $0121, $0107, $0100, $0103 ; C#
+	dc.w	$0100, $0101, $0102, $0101, $010B, $0100, $0103 ; D
+	dc.w	$0100, $0101, $0102, $0101, $010F, $0100, $0103 ; D#
+	dc.w	$0100, $0101, $0102, $0101, $0123, $0100, $0103 ; E
+	dc.w	$0100, $0101, $0102, $0101, $0103, $0104, $0103 ; F
+	dc.w	$0100, $0101, $0102, $0101, $0103, $0108, $0103 ; F#
+	dc.w	$0100, $0101, $0102, $0101, $0103, $010C, $0103 ; G
+	dc.w	$0100, $0101, $0102, $0101, $0103, $0120, $0107 ; G#
+	dc.w	$0100, $0101, $0102, $0101, $0103, $0100, $010B ; A
+	dc.w	$0100, $0101, $0102, $0101, $0103, $0100, $010F ; A#
+	dc.w	$0100, $0101, $0102, $0101, $0103, $0100, $0123 ; B
+	
+PianoChannelProperties:
+	dc.l	$3F28292E,$3F3F3F3F,$3A3B3F3F,$3F3F3F2A,$2B3F3F3F,$38393F3F
+	dc.l	$3F3F3F3F,$3F3F3F3F,$3F3F3F3F,$3F3F3F3F,$3F3F3F3F,$3F3F3F3F
+
+PianoChannelNames:
+	dc.b	$4C,$5A,$00,$22 ; FM 1
+	dc.b	$4C,$5A,$00,$24 ; FM 2
+	dc.b	$4C,$5A,$00,$26 ; FM 3
+	dc.b	$4C,$5A,$00,$28 ; FM 4
+	dc.b	$4C,$5A,$00,$2a ; FM 5
+	dc.b	$4C,$5A,$00,$2c ; FM 6
+	dc.b	$60,$66,$4E,$22 ; PSG1
+	dc.b	$60,$66,$4E,$24 ; PSG2
+	dc.b	$60,$66,$4E,$26 ; PSG3
+	dc.b	$60,$66,$4E,$28 ; PSG4
+
+PianoTiles
+	incbin	"data/piano.bin",0,$BFF
+	even
+	
+ClearPiano
+	lea		(RAM_PianoTileData),a2
+	move.w	#(18*20),d0
+	clr.l	d1
+@1
+	move.l	d1,(a2)+
+	dbra	d0,@1
+	bra		DrawPianoToVram
+	
+DrawPiano:
+	lea		(RAM_EchoState),a0
+	move.l	a0,a4
+	bsr		Echo_GetLogState
+	lea		(RAM_PianoTileData),a2
+	lea		(RAM_PianoTileData+72),a3
+	lea		(PianoChannelNames),a5
+	clr.l	d1	; temp
+	clr.l	d2	; b channel id
+	clr.l	d3	; w channel data pointer
+	clr.l	d4	; w Palette select
+	
+@1	move.l	d2,d0
+	lsl		#2,d0
+	lea		(DrawPianoTable),a0
+	move.l	(a0,d0.w),a0
+	jsr		(a0)
+	
+	addq.w	#1,d2
+	addq.w	#1,a4
+	cmpi.b	#12,d2
+	
+	bne.s	@1
+
+DrawPianoToVram:
+	lea		($C00000),a0
+	lea		($C00004),a1	
+	lea		(RAM_PianoTileData),a2
+	
+	move.l	#$40840003,d0
+	move.w	#$8f02,(a1)
+	move.w	#19, d1
+	
+@1:
+	move.l	d0,(a1)
+	move.w	#35, d3			; 36 columns
+
+@2:
+	move.w	(a2)+,(a0)
+	dbra	d3,	@2;
+
+	add.l	#$00800000, d0
+	dbra	d1, @1;	
+	
+	rts
+
+DrawNothing:
+	rts
+DrawPianoTable:	
+	dc.l	DrawFM,DrawFM,DrawFM,DrawNothing
+	dc.l	DrawFM,DrawFM,DrawFM6,DrawNothing
+	dc.l	DrawPSG,DrawPSG,DrawPSG,DrawPSG4	
+	dc.l	DrawNothing
+DrawFM:
+	bsr.w	DrawChannelNamePan
+	bsr.w	DrawKeyboard
+	bsr.w	DrawNoteFM
+	bsr.w	DrawChannelInsID
+	rts
+	
+DrawPSG:
+	bsr.w	DrawChannelNamePan
+	bsr.w	DrawKeyboard
+	bsr.w	DrawNotePSG
+	bsr.w	DrawChannelInsID
+	rts
+	
+DrawFM6:
+	bsr.w	DrawChannelNamePan
+	btst	#0,($16,a4)
+	beq		@NoSample
+	bsr.w	DrawBlocks
+	bsr.w	DrawBlockSample
+	bra.b	@skip
+@NoSample
+	bsr.w	DrawKeyboard
+	bsr.w	DrawNoteFM
+@skip
+	bsr.w	DrawChannelInsID
+	rts
+	
+DrawPSG4:
+	bsr.w	DrawChannelNamePan
+	bsr.w	DrawBlocks
+	bsr.w	DrawBlockNoise
+	bsr.w	DrawChannelInsID
+	rts
+
+; change palette if channel is locked
+DrawChannelNamePan:
+	move.w	#$2000,d4
+	btst	#5,($10,a4)
+	beq		@NotLocked
+	move.w	#$4000,d4
+@NotLocked
+
+; draw channel name
+	moveq	#3,d1
+@1: move.w	d4,d0
+	add.b	(a5)+,d0
+	move.w	d0,(a2)+
+	addq	#1,d0
+	move.w	d0,(a3)+
+	dbra	d1,@1
+	
+; draw pan position (left / right)
+; check left...
+	move.w	#$1126,d1
+	move.w	#$0126,d0
+	btst	#7,($10,a4)
+	beq.s	@noleft
+	move.w	#$1136,d0
+	move.w	#$0136,d1
+@noleft
+	add.w	d4,d0
+	add.w	d4,d1
+	move.w	d0,(a2)+
+	move.w	d1,(a3)+
+	
+; check right...
+	move.w	#$1926,d1
+	move.w	#$0926,d0
+	btst	#6,($10,a4)
+	beq.s	@noright
+	move.w	#$1936,d0
+	move.w	#$0936,d1
+@noright
+	add.w	d4,d0
+	add.w	d4,d1
+	move.w	d0,(a2)+
+	move.w	d1,(a3)+
+	rts
+	
+; draw blank keyboard
+DrawKeyboard:
+	movem.l	a2-a3,-(a7)	; backup pointers
+; first draw a blank one 4 times..
+	moveq	#3,d5
+@0	lea		(PianoOctavePatterns),a0
+	moveq	#6,d0
+@1	move.w	d4,d6
+	add.w	(a0)+,d6
+	move.w	d6,(a2)+
+	add.w	#$10,d6
+	move.w	d6,(a3)+
+	dbra	d0,@1
+	dbra	d5,@0
+
+	movem.l	(a7)+,a2-a3	; restore pointers
+	rts
+	
+; draw blank blocks
+DrawBlocks:
+	movem.l	a2-a3,-(a7)	; backup pointers
+	moveq	#27,d5
+@0	move.w	d4,d6
+	add.w	#$0127,d6
+	move.w	d6,(a2)+
+	move.w	d6,(a3)+
+	dbra	d5,@0
+
+	movem.l	(a7)+,a2-a3	; restore pointers
+	rts
+
+; Draw FM note
+DrawNoteFM
+	clr.l	d0
+	clr.l	d1
+	clr.l	d6
+	
+	; Get note
+	move.b	(a4),d0
+	sub.b	#1,d0
+	; Calculate octave
+	move.b	d0,d1
+	divu.w	#32,d1  ; divide by 32
+	move.b	d1,d6
+	; Calculate semitone
+	mulu.w	#32,d6	; multiply by 32
+	sub.w	d6,d0	; Get note offset
+	divu.w	#2,d0   ; divide by 2
+	
+	bra.s	DrawNote
+
+; Draw PSG note
+DrawNotePSG
+	clr.l	d0
+	clr.l	d1
+	clr.l	d6
+	
+	; Get note
+	move.b	(a4),d0
+	; Calculate octave
+	move.b	d0,d1
+	divu.w	#24,d1  ; divide by 24
+	move.b	d1,d6
+	; Calculate semitone
+	mulu.w	#24,d6	; multiply by 32
+	sub.w	d6,d0	; Get note offset
+	divu.w	#2,d0   ; divide by 2
+	
+	add.w	#2,d1	; Increase PSG octave
+	
+; d1: Octave
+; d0: Semitone
+DrawNote:
+	btst	#0,($10,a4)
+	beq		PianoNoteOff
+	btst	#0,d1	; octave odd?
+	beq		@Even
+	sub.b	#1,d1	; compensate for tilemaps
+	add.b	#12,d0
+@Even
+	mulu.w	#7,d1
+	mulu.w	#14,d0
+	movem.l	a2-a3,-(a7)	; backup pointers
+	add.w	d1,a2
+	add.w	d1,a3
+	lea		(PianoOctavePatterns1),a0
+	add.w	d0,a0
+	moveq	#6,d0
+@2	move.w	d4,d6
+	add.w	(a0)+,d6
+	move.w	d6,(a2)+
+	add.w	#$10,d6
+	move.w	d6,(a3)+
+	dbra	d0,@2
+	movem.l	(a7)+,a2-a3	; restore pointers
+PianoNoteOff
+	add.w	#56,a2	
+	add.w	#56,a3
+	rts
+	
+; Draw PSG4 "note"
+DrawBlockNoise:
+	btst	#0,($10,a4)
+	beq		PianoNoteOff
+	clr.l	d0
+	move.b	(a4),d0
+	bra.b	DrawBlockValue
+	
+; Draw FM6 sample
+DrawBlockSample:
+	clr.l	d0
+	move.b	(6,a4),d0
+
+DrawBlockValue
+	cmpi.b	#56,d0
+	bcs.s	@Under56	; get it under 56
+	sub.b	#56,d0
+	bra.b	DrawBlockValue
+@Under56
+	movem.l	a2-a3,-(a7)	; backup pointers
+;@1	bra.b @1
+	move.w	#$0137,d6
+	add.w	d4,d6
+	
+	bclr	#0,d0
+	beq.s	@bottomline
+	add.w	d0,a2
+	move.w	d6,(a2)
+	bra.s	@skip
+@bottomline
+	add.w	d0,a3
+	move.w	d6,(a3)
+@skip
+	movem.l	(a7)+,a2-a3	; restore pointers
+@NotPlaying
+	add.w	#56,a2	
+	add.w	#56,a3
+	rts
+DrawChannelProperties:
+	rts
+DrawChannelInsID:
+	move.w	d4,d0
+	add.w	#$12A,d0
+	move.w	d0, (a2)+
+	move.w	d4,d0
+	add.w	#$12B,d0
+	move.w	d0, (a2)+
+	move.b	($20,a4),d0
+	lea		(RAM_TextBuffer),a0
+	bsr.b	string_hex_byte
+	move.w	d4,d0
+	add.b	(a0)+,d0
+	move.w	d0, (a3)+
+	move.w	d4,d0
+	add.b	(a0)+,d0
+	move.w	d0, (a3)+
+	add.w	#72,a2
+	add.w	#72,a3
+	rts
+	
+string_hex_byte:
+	movem.l	d0-d2/a0,-(sp)
+	clr.l	d2
+	clr.l	d1
+	ror.l	#8,d0
+	moveq	#1,d2	
+@loop:
+	rol.l	#4,d0
+	move.w	d0,d1
+	andi.w	#$F,d1
+	addi.w	#$E0,d1
+	move.b	d1,(a0)+
+	dbf	d2,@loop
+	movem.l	(sp)+,d0-d2/a0
+	rts	
+		

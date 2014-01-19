@@ -1,0 +1,211 @@
+;==============================================================================
+; state log related functions
+;==============================================================================
+	if LogState
+
+;****************************************************************************
+; StateNoteOn*
+; a - channel
+; b - value
+;****************************************************************************
+StatePlaySample
+	push af
+	ld a,12
+	jr StateNoteOn
+StateNoteOnNoise
+	push af
+	ld a,11
+	jr StateNoteOn
+StateNoteOnPSG
+	push af
+	add 8
+	jr StateNoteOn
+StateNoteOnFM
+	push af
+StateNoteOn
+	push hl
+	ld  h,>RAM_StateNote
+;	add <RAM_StateNote  ; No need
+	ld  l,a
+	ld  (hl),b	; Set note
+	add $10
+	ld	l,a
+	set 0,(hl)	; Set flag
+	PollPCM
+	pop hl
+	pop af
+	ret
+;****************************************************************************
+; StateNoteOff*
+; a - channel
+;****************************************************************************
+StateStopSample
+	push af
+	ld a,12
+	jr StateNoteOff
+StateNoteOffPSG
+	push af
+	add 8
+	jr StateNoteOff
+StateNoteOffFM
+	push af
+	and $07
+StateNoteOff
+	push hl
+	ld  h,>RAM_StateFlags
+	add <RAM_StateFlags
+	ld  l,a
+	res 0,(hl)	; Reset flag	
+	PollPCM
+	pop hl
+	pop af
+	ret
+;****************************************************************************
+; StateInstrument*
+; a - channel
+; b - value
+;****************************************************************************
+StateInstrumentPSG
+	push af
+	add 8
+	jr StateInstrument
+StateInstrumentFM
+	push af
+	and $07
+StateInstrument
+	push hl
+	ld  h,>RAM_StateInsts
+	add <RAM_StateInsts
+	ld  l,a
+	ld  (hl),b	; Set instrument
+	sub $10
+	ld	l,a
+;	ld (hl),$C0	; Set flag
+	set	7,(hl)
+	set 6,(hl)
+	PollPCM
+	pop hl
+	pop af
+	ret
+;****************************************************************************
+; StateClear*
+; a - channel
+;****************************************************************************
+StateClearPSG
+	push af
+	add 7
+	jr StateClear
+StateClearFM
+	push af
+StateClear
+	push hl
+	ld  h,>RAM_StateFlags
+	add <RAM_StateFlags
+	ld  l,a
+	ld (hl),$C0	; Clear	flags
+	add $10
+	ld  l,a
+	ld (hl),0	; Clear	instrument
+	PollPCM
+	pop hl
+	pop af
+	ret
+;****************************************************************************
+; StateRestore*
+; a - channel
+;****************************************************************************
+StateRestorePSG
+	push hl
+	push af
+	add 7
+	ld  h,>RAM_StateFlags
+	add <RAM_StateFlags
+	ld  l,a
+	ld (hl),$C0	; Clear	flags
+	pop af
+	pop hl
+	ret
+StateRestoreFM
+	push af
+	dec a
+	push hl
+	push de
+	ld h,>RAM_BGMFMInstr
+	push af
+	add <RAM_BGMFMInstr
+	ld  l,a
+	ld  d,(hl)
+	add $10		; Get BGM flags
+	ld  l,a
+	ld  e,(hl)
+	res	5,e
+	PollPCM
+	pop af
+	ld  h,>RAM_StateFlags
+	add <RAM_StateFlags
+	ld  l,a
+	ld (hl),e	; Clear	flags
+	add $10
+	ld  l,a
+	ld (hl),d	; Clear	instrument
+	PollPCM
+	pop de
+	pop hl
+	pop af
+	ret
+
+;****************************************************************************
+; StateSetParam*
+; a - channel
+; b - value
+;****************************************************************************
+
+StateSetParamBGM
+	push af
+	and $07
+	push hl
+	ld  h,>RAM_StateFlags
+	add <RAM_StateFlags
+	ld  l,a
+	ld a,(hl)
+	and $3F	; clear old params but keep flags
+	or b
+	ld (hl),a
+	jr StateSetParamSkip
+StateSetParamSFX
+	push af
+	and $07
+	push hl
+	ld  h,>RAM_StateFlags
+	add <RAM_StateFlags
+	ld  l,a
+	ld (hl),b
+	set 5,(hl)
+StateSetParamSkip
+	PollPCM
+	pop hl
+	pop af
+	ret
+	
+	endif
+	
+;****************************************************************************
+; StateLock*
+; a - channel
+;****************************************************************************
+StateLockPSG
+	push af
+	add 8
+	jr StateLock
+StateLockFM
+	push af
+StateLock
+	push hl
+	ld  h,>RAM_StateFlags
+	add <RAM_StateFlags
+	ld  l,a
+	set 5,(hl)	; Reset flag	
+	PollPCM
+	pop hl
+	pop af
+	ret

@@ -40,4 +40,54 @@ DrawBG:
 ;****************************************************************************
 
 @BGData:
+t1	= $00C4
+t2	= $00C5
+t3	= $00C6
+t4	= $00C7
+t5	= $00C8
+t6	= $00C9
+t7	= $00CA
+t8  = $00CB
+
+mm	= t1
+XX	= t2
+zz  = t3
+	   
+;			0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9
+	dc.w	t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1 ; 1
+	dc.w	t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1 ; 2
+	dc.w	t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1 ; 2
+;              1  2  3  4  5  6  7  8  1  2  3  4  5  6  7  8  1  2  3  4  5  6  7  8  1  2  3  4  5  6  7  8
+
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 3
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 4
+	dc.w	mm,mm,mm,mm,XX,XX,XX,XX,XX,XX,XX,zz,mm,mm,XX,XX,XX,XX,zz,mm,XX,XX,zz,mm,mm,XX,XX,zz,mm,XX,XX,XX,XX,XX,zz,mm,mm,mm,mm,mm ; 5
+	dc.w	mm,mm,mm,mm,XX,XX,zz,zz,zz,zz,zz,zz,mm,XX,XX,zz,zz,XX,XX,zz,XX,XX,zz,mm,mm,XX,XX,zz,XX,XX,zz,zz,zz,XX,XX,zz,mm,mm,mm,mm ; 6
+	dc.w	mm,mm,mm,mm,XX,XX,zz,mm,mm,mm,mm,mm,XX,XX,zz,zz,mm,zz,zz,zz,XX,XX,zz,mm,mm,XX,XX,zz,XX,XX,zz,mm,mm,XX,XX,zz,mm,mm,mm,mm ; 7
+	dc.w	mm,mm,mm,mm,XX,XX,XX,XX,XX,XX,zz,mm,XX,XX,zz,mm,mm,mm,mm,mm,XX,XX,XX,XX,XX,XX,XX,zz,XX,XX,zz,mm,mm,XX,XX,zz,mm,mm,mm,mm ; 8
+	dc.w	mm,mm,mm,mm,XX,XX,zz,zz,zz,zz,zz,mm,XX,XX,zz,mm,mm,mm,mm,mm,XX,XX,zz,zz,zz,XX,XX,zz,XX,XX,zz,mm,mm,XX,XX,zz,mm,mm,mm,mm ; 9
+	dc.w	mm,mm,mm,mm,XX,XX,zz,mm,mm,mm,mm,mm,zz,XX,XX,zz,mm,XX,XX,zz,XX,XX,zz,mm,mm,XX,XX,zz,XX,XX,zz,mm,mm,XX,XX,zz,mm,mm,mm,mm ; 10
+	dc.w	mm,mm,mm,mm,XX,XX,XX,XX,XX,XX,XX,zz,mm,zz,XX,XX,XX,XX,zz,zz,XX,XX,zz,mm,mm,XX,XX,zz,zz,XX,XX,XX,XX,XX,zz,zz,mm,mm,mm,mm ; 11
+	dc.w	mm,mm,mm,mm,zz,zz,zz,zz,zz,zz,zz,zz,mm,mm,zz,zz,zz,zz,zz,mm,zz,zz,zz,mm,mm,zz,zz,zz,mm,zz,zz,zz,zz,zz,zz,mm,mm,mm,mm,mm ; 12
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 13
+	
+XX	= t4
+zz  = t5
+
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 16
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,XX,XX,XX,XX,XX,XX,XX,zz,mm,mm,XX,XX,zz,mm,mm,XX,XX,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 17
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,XX,XX,zz,zz,zz,zz,zz,zz,mm,mm,XX,XX,XX,zz,XX,XX,XX,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 18
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,XX,XX,zz,mm,mm,mm,mm,mm,mm,mm,zz,XX,XX,XX,XX,XX,zz,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 19
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,XX,XX,XX,XX,XX,XX,zz,mm,mm,mm,mm,zz,XX,XX,XX,zz,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 20
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,XX,XX,zz,zz,zz,zz,zz,mm,mm,mm,mm,XX,XX,XX,XX,XX,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 21
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,XX,XX,zz,mm,mm,mm,mm,mm,mm,mm,XX,XX,XX,zz,XX,XX,XX,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 22
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,XX,XX,XX,XX,XX,XX,XX,zz,mm,mm,XX,XX,zz,zz,zz,XX,XX,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 23
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,zz,zz,zz,zz,zz,zz,zz,zz,mm,mm,zz,zz,zz,mm,mm,zz,zz,zz,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 24
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 25
+	dc.w	mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm,mm ; 26
+	
+	dc.w	t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1 ; 2
+	dc.w	t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1 ; 27
+	dc.w	t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1,t1 ; 28
+	
     incbin  "data/bg.bin"

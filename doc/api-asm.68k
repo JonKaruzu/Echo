@@ -50,6 +50,10 @@ Echo_StopBGM
 
    Stops playback of background music. Used both to stop and to pause music
    (the latter can be undone with Echo_ResumeBGM, see below).
+   
+Echo_FadeBGM
+
+   Fades playback of background music. Cannot be undone by Echo_ResumeBGM.
 
 Echo_ResumeBGM
 
@@ -85,6 +89,25 @@ Echo_GetStatus
    The API will automatically wait if you try to send a command while Echo is
    busy, so the only reason to check for that is if you don't want to halt
    the 68000 until Echo is ready to take more commands.
+
+Echo_LogState
+
+   Stores 48 bytes of playback data to the address pointed by a0.
+   The format is as follows:
+   
+   Byte $00-$0f ... ESF note data (see esf.txt for details)
+   Byte $10-$1f ... Channel flags:
+                    Bit 0 ... Note on/off
+					Bit 5 ... Channel locked on/off
+					Bit 6 ... Right speaker enabled
+					Bit 7 ... Left speaker enabled
+   Byte $20-$2f ... Instrument ID
+
+   Can be used for fancy sound tests, music synchronization, and who knows.
+   If you want to see an example, just load the Tester ROM and press Start.
+   
+   If you don't need it and feel that you don't want to bloat the Z80 code,
+   you can turn it off while building the Z80 code.
 
 =============================================================================
 

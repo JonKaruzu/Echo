@@ -63,6 +63,15 @@ EntryPoint:
 
     lea     ($C00004), a0           ; Load palette
     lea     ($C00000), a1
+	
+	lea		(PianoTiles),a2			; Load piano tiles	
+	move.w	#$8f02,(a0)
+	move.l  #$5C000000, (a0)
+	move.w	#768, d3
+@1
+	move.l	(a2)+,(a1)
+	dbra	d3,@1
+	
     move.l  #$C0020000, (a0)
     move.l  #$066600CE, (a1)
     move.l  #$000E000E, (a1)
@@ -73,15 +82,23 @@ EntryPoint:
     move.l  #$04440E88, (a1)
     move.l  #$C0620000, (a0)
     move.l  #$04440888, (a1)
-
+	
     move.l  #$C00A0000, (a0)
     move.l  #$02220444, (a1)
     move.l  #$02240024, (a1)
     move.l  #$02440020, (a1)
     move.w  #$0040, (a1)
+	
+    move.l  #$C0380000, (a0)
+    move.l  #$08880EEE, (a1)
+    move.l  #$000E0000, (a1)
+    move.l  #$C0580000, (a0)
+    move.l  #$08440E88, (a1)
+    move.l  #$00080000, (a1)
+;    move.w  #$0000, (a1)
 
     move.l  #$58000000, (a0)        ; Load graphics
-    lea     (@Gfx_Arrows), a2
+    lea     (Gfx_Arrows), a2
     moveq   #12-1, d7
 @LoadGfx:
     move.l  (a2)+, (a1)
@@ -94,6 +111,11 @@ EntryPoint:
     move.l  (a2)+, (a1)
     dbf     d7, @LoadGfx
 
+InitMainMenu:
+	bsr		ClearPiano
+    lea     ($C00004), a0
+    lea     ($C00000), a1
+	
     move.l  #$44880003, (a0)        ; Write left arrow
     move.l  #$00C000C1, (a1)
     move.l  #$45080003, (a0)
@@ -107,20 +129,20 @@ EntryPoint:
     moveq   #2, d0                  ; Write title
     moveq   #1, d1
     move.w  #$8000, d2
-    lea     (@Str_Title1), a0
+    lea     (Str_Title1), a0
     bsr     WriteString
     addq.w  #2, d1
     move.w  #$E000, d2
-    lea     (@Str_Title2), a0
+    lea     (Str_Title2), a0
     bsr     WriteString
 
     moveq   #20-(24/2), d0          ; Write instructions
     moveq   #23, d1
-    lea     (@Str_Instr1), a0
+    lea     (Str_Instr1), a0
     bsr     WriteString
-    moveq   #20-(18/2), d0
+    moveq   #20-(26/2), d0
     addq.w  #2, d1
-    lea     (@Str_Instr2), a0
+    lea     (Str_Instr2), a0
     bsr     WriteString
 
     bsr     DrawBG                  ; Draw background
@@ -130,7 +152,53 @@ EntryPoint:
 
 ;****************************************************************************
 
-@Gfx_Arrows:
+DrawArrows1:
+    lea     ($C00004), a0
+    lea     ($C00000), a1
+    move.l  #$44880003, (a0)        ; Write left arrow
+    move.l  #$00C000C1, (a1)
+    move.l  #$45080003, (a0)
+    move.l  #$00C200C3, (a1)
+
+    move.l  #$44C40003, (a0)        ; Write right arrow
+    move.l  #$28C128C0, (a1)
+    move.l  #$45440003, (a0)
+    move.l  #$28C328C2, (a1)
+	
+    move.l  #$4A880003, (a0)        ; Clear bottom left arrow
+    move.l  #$00000000, (a1)
+    move.l  #$4B080003, (a0)
+    move.l  #$00000000, (a1)
+
+    move.l  #$4AC40003, (a0)        ; Clear bottom right arrow
+    move.l  #$00000000, (a1)
+    move.l  #$4B440003, (a0)
+    move.l  #$00000000, (a1)	
+	rts
+DrawArrows2:
+    lea     ($C00004), a0
+    lea     ($C00000), a1
+    move.l  #$44880003, (a0)        ; Clear left arrow
+    move.l  #$00000000, (a1)
+    move.l  #$45080003, (a0)
+    move.l  #$00000000, (a1)
+
+    move.l  #$44C40003, (a0)        ; Clear right arrow
+    move.l  #$00000000, (a1)
+    move.l  #$45440003, (a0)
+    move.l  #$00000000, (a1)
+	
+    move.l  #$4A880003, (a0)        ; Write bottom left arrow
+    move.l  #$00C000C1, (a1)
+    move.l  #$4B080003, (a0)
+    move.l  #$00C200C3, (a1)
+
+    move.l  #$4AC40003, (a0)        ; Write bottom right arrow
+    move.l  #$28C128C0, (a1)
+    move.l  #$4B440003, (a0)
+    move.l  #$28C328C2, (a1)	
+	rts
+Gfx_Arrows:
     dc.l    $00000000, $00000000, $00000000, $00000000
     dc.l    $00000034, $00004343, $00343434, $43434343
     dc.l    $00000034, $00004343, $00343434, $43434343
@@ -140,7 +208,7 @@ EntryPoint:
     dc.l    $34343434, $43434343, $34343434, $43434343
     dc.l    $34343434, $00434343, $00003434, $00000043
 
-@Gfx_BG:
+Gfx_BG:
     dc.l    $55555555, $55555555, $55555555, $55555555
     dc.l    $55555555, $55555555, $55555555, $55555555
     dc.l    $00000000, $00000000, $00000000, $00000000
@@ -163,8 +231,8 @@ EntryPoint:
 
                         ; 123456789012345678901234567890123456
 
-@Str_Title1:        dc.b "Echo sound engine", 0
-@Str_Title2:        dc.b "Version 1.2 by Sik", 0
-@Str_Instr1:        dc.b "Use D-pad to select song", 0
-@Str_Instr2:        dc.b "A/C: play, B: stop", 0
+Str_Title1:        dc.b "Echo-EX sound engine", 0
+Str_Title2:        dc.b "Version 1.0 by Sik & CTR", 0
+Str_Instr1:        dc.b "Use D-pad to select song", 0
+Str_Instr2:        dc.b "A: play, B: stop, C: fade.", 0
     even

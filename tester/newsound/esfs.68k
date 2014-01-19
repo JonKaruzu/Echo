@@ -1,0 +1,207 @@
+;
+; ESF List:
+;
+BGM_GHZ:
+	incbin	"data/newmusic/ghz.esf"
+	even
+BGM_SYZ:
+	incbin	"data/newmusic/syz.esf"
+	even
+BGM_TPLake:
+	incbin	"data/newmusic/tplake.esf"
+	even
+BGM_Test:
+BGM_MegaCD:
+	incbin	"data/newmusic/megacd.esf"
+	even
+BGM_Versus:
+	incbin	"data/newmusic/versus.esf"
+	even
+	
+SFX_Beep:
+SFX_Select:
+	ESF_Lock	ESF_PSG1
+	ESF_SetInstr ESF_PSG1,7
+	ESF_SetVol	ESF_PSG1,$00
+	ESF_NoteOn	ESF_PSG1,2,TA
+	ESF_Delay	3
+	ESF_Stop
+	
+SFX_Confirm:
+	ESF_Lock	ESF_PSG1
+	ESF_SetInstr ESF_PSG1,7
+	ESF_SetVol	ESF_PSG1,$00
+	ESF_NoteOn	ESF_PSG1,2,TD
+	ESF_Delay	3
+	ESF_NoteOn	ESF_PSG1,2,TA
+	ESF_Delay	6
+	ESF_Stop
+
+SFX_FMTest1:
+	ESF_Lock	ESF_FM1
+	ESF_SetInstr ESF_FM1,15
+	ESF_SetVol	ESF_FM1,$00
+	ESF_NoteOn	ESF_FM1,3,0
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,1
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,2
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,3
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,4
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,5
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,6
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,7
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,8
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,9
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,10
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,11
+	ESF_Delay	6
+	ESF_NoteOn	ESF_FM1,3,0
+	ESF_Delay	12
+	ESF_NoteOff	ESF_FM1
+	ESF_Stop
+	
+	even
+	
+timing:			= 7			; default=7
+channel:		= ESF_PSG2	; default=ESF_PSG1
+instrument:		= 7			; default=7
+SFX_Totaka:
+	ESF_Lock	channel
+	ESF_SetInstr channel,instrument
+	ESF_SetVol	channel,$00
+	ESF_NoteOn	channel,1,TC
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	3*timing
+	
+	ESF_NoteOn	channel,1,TC
+	ESF_Delay	1*timing
+	ESF_NoteOn	channel,1,TD
+	ESF_Delay	1*timing
+	ESF_NoteOn	channel,1,TE
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	3*timing
+	
+	ESF_NoteOn	channel,1,TD
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	1*timing
+	ESF_NoteOn	channel,1,TC
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	5*timing
+	
+	ESF_NoteOn	channel,1,TG
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	5*timing
+	ESF_NoteOn	channel,1,TE
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	5*timing
+	ESF_NoteOn	channel,2,TC
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	5*timing
+	ESF_NoteOn	channel,1,TG
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	11*timing
+	
+	ESF_NoteOn	channel,1,TG
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	3*timing
+	
+	ESF_NoteOn	channel,1,TG
+	ESF_Delay	1*timing
+	ESF_NoteOn	channel,1,TGS
+	ESF_Delay	1*timing
+	ESF_NoteOn	channel,1,TG
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	3*timing
+	
+	ESF_NoteOn	channel,1,TFS
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	1*timing
+	ESF_NoteOn	channel,1,TDS
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	11*timing
+	
+	ESF_NoteOn	channel,1,TD
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	(8*timing) + timing-3
+	
+	ESF_NoteOn	channel,1,TFS
+	ESF_Delay	3
+	ESF_NoteOn	channel,1,TG
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Delay	7*timing
+	ESF_NoteOn	channel,1,TC
+	ESF_Delay	1*timing
+	ESF_NoteOff	channel
+	ESF_Stop
+	even
+	
+SFX_FMTest:
+	ESF_Lock	ESF_FM1
+	ESF_SetInstr ESF_FM1,6
+	ESF_SetVol	ESF_FM1,$00
+	ESF_NoteOn	ESF_FM1,3,0
+	ESF_SetFrq1	ESF_FM1,1288+644
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,3336+644
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,5384+644
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,7432+644
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,9480+644
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,11528+644
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,13576+644
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,2482
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,2653
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,2824
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,2994
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,3165
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,3336
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,3506
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,3677
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,3848
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,4018
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,4189
+	ESF_Delay	32
+	ESF_SetFrq1	ESF_FM1,4360
+	ESF_Delay	32
+	ESF_NoteOff	ESF_FM1
+	ESF_Stop
+	even

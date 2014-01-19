@@ -1,10 +1,34 @@
+;==============================================================================
+; Echo-EX v1.0
+;==============================================================================
+; Extended sound driver based on Echo
+; Original code (c) 2013 Sik
+; Modifications (c) 2014 ctr
+;==============================================================================
+
+LogState	equ 1	; Optional, can be used for fancy sound tests, etc.
+
     include "src-z80/core/main.z80"
     include "src-z80/player/pcm.z80"
     include "src-z80/core/bgm.z80"
     include "src-z80/core/sfx.z80"
+	
+	if LogState
+		include "src-z80/core/state.z80"
+	endif
+	
     include "src-z80/player/fm.z80"
     include "src-z80/player/psg.z80"
     include "src-z80/player/misc.z80"
 
     include "src-z80/player/freq.z80"
+	
+; Fill the unused space after the frequency table with SOMETHING.
+	align 4
+	byte "Echo-EX     v1.0"
+	byte "  (c) 2014 ctr  "
+	byte "================"
+	byte "Based on Echo   "
+	byte "  (c) 2013 Sik  "
+	
     include "src-z80/core/vars.z80"

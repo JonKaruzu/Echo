@@ -86,13 +86,13 @@ EntryPoint:
     ld (ix+1), $3F
     
     jp IdleLoop                 ; Go into idle loop
-
+	
 ;****************************************************************************
 ; PollPCM
 ; Used to update PCM while not idle
 ;****************************************************************************
 
-PollPCM: macro
+	macro PollPCM
     ld a, ($4000)
     rrca
     call c, UpdatePCM
@@ -120,6 +120,8 @@ RunCommand:
     jp z, ResumeBGM
     dec a                       ; Command $07: set PCM rate
     jp z, SetPCMRate
+    dec a                       ; Command $08: fade BGM
+    jp z, FadeBGM
 
     PollPCM
 
@@ -191,7 +193,7 @@ DoTick_PSGSkip:
 ; breaks ..... AF
 ;****************************************************************************
 
-BankSwitch: macro
+BankSwitch	macro
     ld (hl), a
     rrca
     ld (hl), a

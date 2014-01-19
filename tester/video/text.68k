@@ -106,3 +106,20 @@ ClearLines:
     dbf     d1, @Loop
 
     rts                             ; End of subroutine
+
+ClearLine:
+    move.l  #$4A8E0003, d0          ; Initial position to clear
+    lea     ($C00004), a0           ; VDP control port
+    lea     ($C00000), a1           ; VDP data port
+
+    moveq   #2-1, d1                ; Clear all lines
+    moveq   #0, d2
+@Loop:
+    move.l  d0, (a0)
+    rept    26/2
+    move.l  d2, (a1)
+    endr
+    add.l   #$80<<16, d0
+
+    dbf     d1, @Loop
+    rts                             ; End of subroutine

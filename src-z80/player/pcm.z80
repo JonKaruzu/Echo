@@ -13,17 +13,27 @@ PlayPCMBGM:
     ld a, (RAM_Locked+6)        ; Check if channel is free
     or a
     jp nz, ProcessBGMSkip1      ; Don't play sample if locked
+	
+    PollPCM
+	
+    ld a, (RAM_BGMFadeOut)        ; Check if channel is free
+    or a
+    jp nz, ProcessBGMSkip1      ; Don't play sample if fading out
 
     call PlayPCM                ; We're just a wrapper
     jp ProcessBGMRun            ; End of subroutine
 
 PlayPCM:
     call GetParam               ; Get sample ID
-    
+	if LogState
+		call StatePlaySample
+	endif
+	
     ld a, b
     exx                         ; We'll modify PCM data now
 
-    ld h, RAM_PointerList>>8    ; Get offset in pointer list
+;    ld h, RAM_PointerList>>8    ; Get offset in pointer list
+    ld h, >RAM_PointerList		; Get offset in pointer list
     ld l, a
 
     ld d, (hl)                  ; Get PCM address
@@ -37,7 +47,8 @@ PlayPCM:
     ld (RAM_LastBank), a
     BankSwitch
     
-    ld h, RAM_PCMBuffer>>8      ; Set buffer where the sample starts
+;    ld h, RAM_PCMBuffer>>8      ; Set buffer where the sample starts
+    ld h, >RAM_PCMBuffer      ; Set buffer where the sample starts
     ld a, e
     or $F0
     ld l, a
@@ -220,6 +231,10 @@ StopPCMBGM:
     jp ProcessBGMRun            ; End of subroutine
 
 StopPCM:
+	if LogState
+		call StateStopSample
+	endif
+	
     ld a, $C9                   ; Stop PCM playback
     ld (UpdatePCM), a
 
